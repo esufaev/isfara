@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15 
+    container_name: isfara_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: qwerty228
+      POSTGRES_DB: isfara_db
+    ports:
+      - "5432:5432" 
+    volumes:
+      - pg_data:/var/lib/postgresql/data 
+    networks:          
+      - isfara_net
+
+
+networks:
+  isfara_net:
+    driver: bridge
+    ipam: 
+      config:
+        - subnet: 10.5.0.0/16 
+          gateway: 10.5.0.1
+
+volumes:
+  pg_data:
