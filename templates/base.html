@@ -23,19 +23,21 @@
                     <nav class="navbar-nav align-items-center w-100 justify-content-md-end">
                         <a href="/" class="nav-link-custom">Главная</a>
                         
-                        <a href="/cart" class="nav-link-custom position-relative me-3">
-                            <i class="fas fa-shopping-cart"></i> Корзина
-                            <span id="cart-badge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="display: none; font-size: 0.7rem;">
-                                0
-                            </span>
-                        </a>
-                        
                         {% if request.state.user_role %}
+                            
+                            <a href="/cart" class="nav-link-custom position-relative me-3">
+                                <i class="fas fa-shopping-cart"></i> Корзина
+                                <span id="cart-badge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="display: none; font-size: 0.7rem;">
+                                    0
+                                </span>
+                            </a>
+                            
                             {% if request.state.user_role == 'admin' %}
                                 <a href="/admin/dashboard" class="nav-link-custom text-danger fw-bold">Управление</a>
                             {% endif %}
                             <a href="/profile" class="nav-link-custom">Профиль</a>
                             <a href="/logout" class="nav-link-custom d-md-none text-danger mt-3 fw-bold">Выйти</a>
+                        
                         {% else %}
                             <a href="/login" class="nav-link-custom">Войти</a>
                             <a href="/register" class="btn-call mt-3 mt-md-0 ms-md-3">Стать гостем</a>
@@ -102,9 +104,11 @@
     <script>
         async function updateGlobalCartBadge() {
             try {
+                const badge = document.getElementById('cart-badge');
+                if (!badge) return;
+
                 const res = await fetch('/api/cart/count');
                 const data = await res.json();
-                const badge = document.getElementById('cart-badge');
                 
                 if (data.count > 0) {
                     badge.innerText = data.count;
@@ -121,8 +125,10 @@
 
         function showCartToast() {
             const toastEl = document.getElementById('cartToast');
-            const toast = new bootstrap.Toast(toastEl, { delay: 3000 });
-            toast.show();
+            if (toastEl) {
+                const toast = new bootstrap.Toast(toastEl, { delay: 3000 });
+                toast.show();
+            }
         }
     </script>
 </body>

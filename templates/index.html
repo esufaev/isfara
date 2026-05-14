@@ -22,6 +22,8 @@
 </div>
 
 <script>
+const isAuthenticated = {% if request.state.user_role %}true{% else %}false{% endif %};
+
 document.addEventListener("DOMContentLoaded", () => {
     loadMenu();
 });
@@ -45,8 +47,23 @@ async function loadMenu() {
         menuItems.forEach(item => {
             const desc = item.description ? item.description : 'Традиционное блюдо';
             const imgUrl = item.image_url ? item.image_url : 'https://avatars.mds.yandex.net/i?id=73cb5c51a3d77a589eba5d99e62030c5_l-4820664-images-thumbs&n=13';
-            
             const safeName = item.item_name.replace(/'/g, "\\'");
+
+            let actionButtonHTML = '';
+            if (isAuthenticated) {
+                actionButtonHTML = `
+                    <button class="btn btn-outline-danger rounded-pill px-4" 
+                            onclick="addToCart('${item.item_id}', '${safeName}', ${item.price}, '${imgUrl}')">
+                        <i class="fas fa-plus"></i> В корзину
+                    </button>
+                `;
+            } else {
+                actionButtonHTML = `
+                    <a href="/login" class="btn btn-outline-secondary rounded-pill px-4 text-decoration-none">
+                        Войти для заказа
+                    </a>
+                `;
+            }
 
             const itemHTML = `
                 <div class="col-md-4 mb-4">
@@ -57,10 +74,7 @@ async function loadMenu() {
                             <p class="text-muted small mb-3 flex-grow-1">${desc}</p>
                             <div class="d-flex justify-content-between align-items-center mt-auto">
                                 <h5 class="fw-bold mb-0" style="color: var(--primary);">${item.price} ₽</h5>
-                                <button class="btn btn-outline-danger rounded-pill px-4" 
-                                        onclick="addToCart('${item.item_id}', '${safeName}', ${item.price}, '${imgUrl}')">
-                                    <i class="fas fa-plus"></i> В корзину
-                                </button>
+                                ${actionButtonHTML}
                             </div>
                         </div>
                     </div>
