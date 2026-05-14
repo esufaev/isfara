@@ -1,0 +1,38 @@
+<!-- templates/login.html -->
+{% extends "base.html" %}
+
+{% block title %}Авторизация — Исфара{% endblock %}
+
+{% block content %}
+<div class="container flex-grow-1 d-flex justify-content-center align-items-center py-5">
+    <div class="auth-card shadow-sm">
+        <h2 class="text-center mb-4" style="color: var(--accent-red);">Вход в аккаунт</h2>
+        
+        {% if flash_msg %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ flash_msg }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endif %}
+        
+        <form action="/api/auth/login" method="POST">
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input type="email" name="email" class="form-control" placeholder="example@mail.ru" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Пароль</label>
+                <input type="password" name="password" class="form-control" placeholder="••••••••" required>
+            </div>
+            <button type="submit" class="btn-reg mt-3">ВОЙТИ</button>
+        </form>
+        
+        <p class="text-center mt-4 mb-0">
+            Нет аккаунта? <a href="/register" class="reg-link">Зарегистрироваться</a>
+        </p>
+    </div>
+</div>
+{% endblock %}
+
+<!-- Отключаем футер на этой странице -->
+{% block footer %}{% endblock %}

@@ -1,0 +1,74 @@
+﻿<!-- --- START OF FILE templates/index.html --- -->
+{% extends "base.html" %}
+
+{% block content %}
+<section class="hero text-center">
+    <div class="container">
+        <span class="subtitle d-block mb-3">Традиционная таджикская кухня</span>
+        <h1 class="display-2 fw-bold">Вкус солнечной <span>Исфары</span></h1>
+        <p class="lead">Погрузитесь в атмосферу гостеприимства.</p>
+        <a href="#menu" class="btn btn-warning btn-lg rounded-pill px-5 mt-4">Смотреть меню</a>
+    </div>
+</section>
+
+<div id="menu" class="container mt-5 mb-5">
+    <h2 class="text-center mb-5" style="font-family: 'Playfair Display'; color: var(--primary);">Меню Центрального Филиала</h2>
+    
+    <div id="menu-container" class="row">
+        <div class="col-12 text-center text-muted">
+            <div class="spinner-border text-danger" role="status"></div>
+            <p class="mt-2">Загрузка меню...</p>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    loadMenu();
+});
+
+async function loadMenu() {
+    const branchId = 1; 
+    const menuContainer = document.getElementById('menu-container');
+
+    try {
+        const response = await fetch(`/api/menu/${branchId}`);
+        if (!response.ok) throw new Error("Ошибка при получении данных");
+
+        const menuItems = await response.json();
+        menuContainer.innerHTML = ''; 
+
+        if (menuItems.length === 0) {
+            menuContainer.innerHTML = '<p class="text-center w-100 text-muted">В данном филиале пока нет доступных блюд.</p>';
+            return;
+        }
+
+        menuItems.forEach(item => {
+            const desc = item.description ? item.description : 'Традиционное блюдо';
+            
+            // Если админ добавил картинку - берем её, если нет - ставим дефолтную (плов)
+            const imgUrl = item.image_url ? item.image_url : 'https://avatars.mds.yandex.net/i?id=73cb5c51a3d77a589eba5d99e62030c5_l-4820664-images-thumbs&n=13';
+            
+            const itemHTML = `
+                <div class="col-md-4 mb-4">
+                    <div class="menu-item h-100 shadow-sm d-flex flex-column">
+                        <div class="item-img" style="background-image: url('${imgUrl}'); height: 200px; background-size: cover; background-position: center;"></div>
+                        <div class="item-info p-4 flex-grow-1 d-flex flex-column">
+                            <h4 class="mb-2" style="font-family: 'Playfair Display'; color: var(--dark);">${item.item_name}</h4>
+                            <p class="text-muted small mb-3 flex-grow-1">${desc}</p>
+                            <h5 class="fw-bold mb-0" style="color: var(--primary);">${item.price} ₽</h5>
+                        </div>
+                    </div>
+                </div>
+            `;
+            menuContainer.innerHTML += itemHTML;
+        });
+
+    } catch (error) {
+        console.error("Ошибка:", error);
+        menuContainer.innerHTML = '<p class="text-center text-danger w-100">Не удалось загрузить меню. Проверьте соединение с сервером.</p>';
+    }
+}
+</script>
+{% endblock %}
+<!-- --- END OF FILE templates/index.html --- -->

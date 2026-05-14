@@ -1,0 +1,91 @@
+<!-- templates/profile.html -->
+{% extends "base.html" %}
+
+{% block title %}Личный кабинет — Исфара{% endblock %}
+
+{% block content %}
+<div class="container py-5 flex-grow-1 d-flex flex-column justify-content-center">
+    
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-5">
+        <h2 class="fw-bold mb-3 mb-md-0" style="color: var(--primary);">Личный кабинет</h2>
+        <div>
+            {% if user.role == 'admin' %}
+            <a href="/admin/dashboard" class="btn btn-outline-danger rounded-pill px-4 me-2">Панель управления</a>
+            {% endif %}
+            <a href="/logout" class="btn btn-dark rounded-pill px-4"><i class="fas fa-sign-out-alt me-2"></i>Выйти</a>
+        </div>
+    </div>
+
+    <div class="row g-4 align-items-center">
+        <!-- Левая часть: Крутая виртуальная карта -->
+        <div class="col-lg-5 col-md-6">
+            <div class="loyalty-card">
+                <div>
+                    <div class="card-chip"></div>
+                    <div class="card-type">
+                        {% if user.role == 'admin' %}Служебная карта{% else %}Почетный гость{% endif %}
+                    </div>
+                    <div class="card-name">{{ user.first_name }} {{ user.last_name }}</div>
+                </div>
+                <div class="card-number">
+                    <!-- Показываем последние 4 цифры телефона в стиле номера карты -->
+                    ISFA • 8492 • 1109 • {{ user.phone[-4:] if user.phone|length >= 4 else '0000' }}
+                </div>
+                <div class="card-logo">ИСФАРА</div>
+            </div>
+        </div>
+
+        <!-- Правая часть: Красивые плашки с данными -->
+        <div class="col-lg-7 col-md-6">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-body p-4 p-lg-5">
+                    <h4 class="mb-4 text-dark" style="font-family: 'Playfair Display', serif;">
+                        <i class="fas fa-info-circle text-muted me-2"></i>Ваша информация
+                    </h4>
+                    
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <div class="p-3 bg-light rounded-3 d-flex align-items-center">
+                                <div class="bg-white rounded-circle d-flex justify-content-center align-items-center shadow-sm me-3" style="width: 45px; height: 45px;">
+                                    <i class="fas fa-user text-danger"></i>
+                                </div>
+                                <div>
+                                    <small class="text-muted d-block mb-1" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">Имя Фамилия</small>
+                                    <span class="fw-bold text-dark fs-5">{{ user.first_name }} {{ user.last_name }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-3 bg-light rounded-3 d-flex align-items-center">
+                                <div class="bg-white rounded-circle d-flex justify-content-center align-items-center shadow-sm me-3" style="width: 40px; height: 40px;">
+                                    <i class="fas fa-phone text-danger"></i>
+                                </div>
+                                <div>
+                                    <small class="text-muted d-block mb-1" style="font-size: 0.75rem; text-transform: uppercase;">Телефон</small>
+                                    <span class="fw-bold text-dark">{{ user.phone }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-3 bg-light rounded-3 d-flex align-items-center">
+                                <div class="bg-white rounded-circle d-flex justify-content-center align-items-center shadow-sm me-3" style="width: 40px; height: 40px;">
+                                    <i class="fas fa-envelope text-danger"></i>
+                                </div>
+                                <div>
+                                    <small class="text-muted d-block mb-1" style="font-size: 0.75rem; text-transform: uppercase;">Email</small>
+                                    <span class="fw-bold text-dark" style="word-break: break-all;">{{ user.email }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+<!-- Отключаем футер на этой странице -->
+{% block footer %}{% endblock %}

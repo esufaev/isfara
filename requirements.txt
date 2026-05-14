@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+sqlalchemy[asyncio]
+asyncpg
+alembic
+passlib[bcrypt]
+python-jose[cryptography]
+itsdangerous
+jinja2

@@ -1,0 +1,96 @@
+<!-- templates/admin.html -->
+{% extends "base.html" %}
+
+{% block title %}Управление рестораном{% endblock %}
+
+{% block content %}
+<div class="container py-5 flex-grow-1">
+    
+    {% if flash_msg %}
+    <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
+        {{ flash_msg }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endif %}
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 style="color: var(--primary);">Панель Администратора</h2>
+        <a href="/profile" class="btn btn-outline-secondary rounded-pill px-4">Назад в профиль</a>
+    </div>
+    
+    <div class="row">
+        <!-- БЛОК ДОБАВЛЕНИЯ БЛЮДА В БРАНЧ -->
+        <div class="col-lg-4 mb-4">
+            <div class="card shadow-sm h-100 border-0">
+                <div class="card-header text-white" style="background-color: var(--accent-red);">
+                    <h5 class="mb-0 py-1"><i class="fas fa-utensils me-2"></i>Добавить блюдо</h5>
+                </div>
+                <div class="card-body bg-white rounded-bottom">
+                    <form action="/admin/menu/add" method="POST">
+                        <div class="mb-3">
+                            <label class="form-label text-muted small fw-bold">ВЫБЕРИТЕ ФИЛИАЛ</label>
+                            <select name="branch_id" class="form-select bg-light" required>
+                                {% for b in branches %}
+                                    <option value="{{ b.id }}">{{ b.name }} (ID: {{ b.id }})</option>
+                                {% else %}
+                                    <option value="" disabled selected>Нет доступных филиалов</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-muted small fw-bold">НАЗВАНИЕ БЛЮДА</label>
+                            <input type="text" name="name" class="form-control" placeholder="Напр: Манты" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-muted small fw-bold">ССЫЛКА НА ФОТО</label>
+                            <input type="url" name="image_url" class="form-control" placeholder="https://...">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-muted small fw-bold">ОПИСАНИЕ СОСТАВА</label>
+                            <textarea name="description" class="form-control" rows="3" placeholder="Мясо, лук, специи..."></textarea>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label text-muted small fw-bold">ЦЕНА (₽)</label>
+                            <input type="number" name="price" step="0.01" min="0" class="form-control" placeholder="350.00" required>
+                        </div>
+                        <button type="submit" class="btn-reg w-100 m-0">Добавить в меню</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- СПИСОК ПОЛЬЗОВАТЕЛЕЙ -->
+        <div class="col-lg-8 mb-4">
+            <div class="card shadow-sm h-100 border-0">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0 py-1"><i class="fas fa-users me-2"></i>Пользователи системы</h5>
+                </div>
+                <div class="card-body p-0" style="overflow-x: auto;">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="ps-4">Имя Фамилия</th>
+                                <th>Email</th>
+                                <th>Роль</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for u in users %}
+                            <tr>
+                                <td class="ps-4 align-middle fw-medium">{{ u.first_name }} {{ u.last_name }}</td>
+                                <td class="align-middle text-muted">{{ u.email }}</td>
+                                <td class="align-middle">
+                                    <span class="badge {% if u.role == 'admin' %}bg-danger{% else %}bg-secondary{% endif %} rounded-pill px-3 py-2">
+                                        {{ u.role|upper }}
+                                    </span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,62 @@
+<!-- templates/register.html -->
+{% extends "base.html" %}
+
+{% block title %}Регистрация — Исфара{% endblock %}
+
+{% block content %}
+<div class="container flex-grow-1 d-flex justify-content-center align-items-center py-5">
+    <div class="auth-card-wide shadow-sm">
+        <h2 class="text-center mb-4" style="color: var(--accent-red);">Регистрация гостя</h2>
+        
+        {% if flash_msg %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ flash_msg }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endif %}
+
+        <form action="/api/auth/register" method="POST">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-bold">Имя</label>
+                    <input type="text" name="first_name" class="form-control" placeholder="Иван" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-bold">Фамилия</label>
+                    <input type="text" name="last_name" class="form-control" placeholder="Иванов" required>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">Отчество (если есть)</label>
+                <input type="text" name="middle_name" class="form-control" placeholder="Иванович">
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-bold">Телефон</label>
+                    <input type="tel" name="phone" class="form-control" placeholder="+7 (999) 000-00-00" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-bold">Email</label>
+                    <input type="email" name="email" class="form-control" placeholder="example@mail.ru" required>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label fw-bold">Пароль</label>
+                <input type="password" name="password" class="form-control" placeholder="••••••••" required>
+            </div>
+
+            <button type="submit" class="btn-reg mt-2">Стать гостем</button>
+            
+            <p class="text-center mt-4 mb-0">
+                Уже есть аккаунт? <a href="/login" class="reg-link">Войти</a>
+            </p>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+<!-- Отключаем футер на этой странице -->
+{% block footer %}{% endblock %}
