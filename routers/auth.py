@@ -1,4 +1,3 @@
-# --- START OF FILE routers/auth.py ---
 from fastapi import APIRouter, Depends, Request, Response, Form
 from fastapi.responses import RedirectResponse
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -68,4 +67,4 @@ async def login(
     )
     
     return response
-# --- END OF FILE routers/auth.py ---
+

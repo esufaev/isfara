@@ -1,4 +1,3 @@
-# --- START OF FILE routers/admin.py ---
 from fastapi import APIRouter, Depends, Request, Form
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
@@ -79,4 +78,4 @@ async def add_menu_item(
     
     request.session["flash_msg"] = f"Блюдо «{name}» успешно добавлено в меню филиала!"
     return RedirectResponse(url="/admin/dashboard", status_code=303)
-# --- END OF FILE routers/admin.py ---
+

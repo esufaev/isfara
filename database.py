@@ -1,4 +1,3 @@
-# --- START OF FILE database.py ---
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
 from sqlalchemy.orm import declarative_base
 
@@ -9,8 +8,6 @@ AsyncSessionLocal = async_sessionmaker(engine, class_=AsyncSession, expire_on_co
 
 Base = declarative_base()
 
-# Зависимость для получения сессии БД в роутах
 async def get_db():
     async with AsyncSessionLocal() as session:
         yield session
-# --- END OF FILE database.py ---

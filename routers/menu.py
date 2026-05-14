@@ -1,4 +1,3 @@
-# --- START OF FILE routers/menu.py ---
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
@@ -32,7 +31,7 @@ async def get_menu(
             MenuItemModel.id.label("item_id"),
             MenuItemModel.name.label("item_name"),
             MenuItemModel.description,
-            MenuItemModel.image_url, # <--- ДОБАВЛЕНО
+            MenuItemModel.image_url, 
             MenuCategory.name.label("category_name"),
             BranchMenu.local_price.label("price")
         )
@@ -50,7 +49,7 @@ async def get_menu(
         "item_id": r.item_id, 
         "item_name": r.item_name, 
         "description": r.description, 
-        "image_url": r.image_url, # <--- ДОБАВЛЕНО
+        "image_url": r.image_url, 
         "category_name": r.category_name, 
         "price": r.price
     } for r in records]
@@ -60,4 +59,4 @@ async def get_menu(
         MENU_CACHE["last_updated"] = now
 
     return items
-# --- END OF FILE routers/menu.py ---
+

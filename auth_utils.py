@@ -1,4 +1,3 @@
-# --- START OF FILE auth_utils.py ---
 from datetime import datetime, timedelta, timezone
 from jose import JWTError, jwt
 from passlib.context import CryptContext
@@ -16,8 +15,6 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 def verify_password(plain_password, hashed_password):
     try:
-        # Если в старой базе лежит не захэшированный пароль, это вызовет ошибку.
-        # Мы перехватываем её и просто отказываем во входе.
         return pwd_context.verify(plain_password, hashed_password)
     except Exception as e:
         print(f"Внимание: Неверный формат хэша в БД: {e}")
@@ -28,7 +25,6 @@ def get_password_hash(password):
 
 def create_access_token(data: dict):
     to_encode = data.copy()
-    # Используем timezone-aware время по современным стандартам
     expire = datetime.now(timezone.utc) + timedelta(days=1)
     to_encode.update({"exp": expire})
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
@@ -40,14 +36,12 @@ async def get_current_user(request: Request, db: AsyncSession = Depends(get_db))
     
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        # Получаем ID как строку (по стандарту JWT)
         user_id_str: str = payload.get("sub")
         role: str = payload.get("role")
         
         if user_id_str is None:
             raise HTTPException(status_code=401, detail="Неверный токен")
             
-        # Конвертируем обратно в число для запроса к БД
         user_id = int(user_id_str)
         
     except JWTError as e:
@@ -71,4 +65,3 @@ def require_roles(allowed_roles: list):
             raise HTTPException(status_code=403, detail="Недостаточно прав для доступа (Требуется роль администратора)")
         return current_user
     return role_checker
-# --- END OF FILE auth_utils.py ---

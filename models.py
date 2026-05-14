@@ -1,4 +1,3 @@
-# --- START OF FILE models.py ---
 from sqlalchemy import Column, Integer, String, Float, Boolean, ForeignKey, DateTime, func
 from database import Base
 
@@ -35,7 +34,7 @@ class MenuItemModel(Base):
     name = Column(String(50), nullable=False)
     base_price = Column(Float, nullable=False)
     description = Column(String)
-    image_url = Column(String) # <--- ДОБАВЛЕНО ДЛЯ КАРТИНОК
+    image_url = Column(String) 
 
 class BranchMenu(Base):
     __tablename__ = "branch_menu"
@@ -44,4 +43,4 @@ class BranchMenu(Base):
     menu_item_id = Column(Integer, ForeignKey("menu_items.id"))
     local_price = Column(Float, nullable=False)
     is_available = Column(Boolean, default=True)
-# --- END OF FILE models.py ---
+
