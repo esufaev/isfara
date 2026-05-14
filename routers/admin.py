@@ -36,8 +36,7 @@ async def admin_dashboard(
     
     flash_msg = request.session.pop("flash_msg", None)
     
-    return templates.TemplateResponse("admin.html", {
-        "request": request, 
+    return templates.TemplateResponse(request=request, name="admin.html", context={
         "users": users, 
         "branches": branches, 
         "current_user": current_user,
